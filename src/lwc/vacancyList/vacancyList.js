@@ -4,11 +4,11 @@ import addVacancy from '@salesforce/apex/VacancyController.addVacancy';
 import { refreshApex } from '@salesforce/apex';
 
 export default class vacancyList extends LightningElement {
-    @api companyId
+    @api recordId;
     showForm=false;
     showSuccess=false;
 
-    @wire(getVacanciesByCompanyId, {companyId:'$companyId'})
+    @wire(getVacanciesByCompanyId, {companyId:'$recordId'})
     vacancies;
 
     addVacancy(){
@@ -25,7 +25,8 @@ export default class vacancyList extends LightningElement {
     }
 
     createVacancy(){
-        addVacancy({companyId: this.companyId, name: this.name, description: this.description} )
+        console.log(this.recordId,  this.name, this.description);
+        addVacancy({companyId: this.recordId, name: this.name, description: this.description} )
             .then( () => {
                     console.log('Vacancy created');
                     this.showForm = false;
@@ -33,6 +34,9 @@ export default class vacancyList extends LightningElement {
                     refreshApex(this.vacancies);
                 }
             )
-            .catch(error => console.log(error))
+            .catch(error => {
+                console.log('Vacancy not created');
+                console.log(error)
+            })
     }
 }
