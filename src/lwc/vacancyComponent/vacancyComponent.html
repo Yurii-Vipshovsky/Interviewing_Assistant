@@ -1,5 +1,18 @@
 <template>
-    <b>Name: </b> {vacancy.Name} <br>
+    <b>Name: </b> <a> {vacancy.Name}</a><br>
     <b>Description: </b> {vacancy.Description__c}<br>
-    <b>Vacancy Status: </b> {vacancy.Available__c}<br>
+    <b>We offer: </b> {vacancy.Description__c}<br>
+    <b>Requirements: </b> {vacancy.Description__c}<br>
+    <b>Vacancy Status: </b>
+    <template if:true={vacancy.Available__c} >
+        Open <br>
+        <lightning-button class='slds-p-top_small' label='Change to Closed' onclick={changeAvailable}></lightning-button>
+    </template>
+    <template if:false= {vacancy.Available__c}>
+        Closed <br>
+        <lightning-button class='slds-p-top_small' label='Change to Open' onclick={changeAvailable}></lightning-button>
+    </template>
+    <br>
+    <lightning-button class='slds-p-top_small' label='Create New Interview' onclick={createInterview}></lightning-button>
+    <br>
 </template>

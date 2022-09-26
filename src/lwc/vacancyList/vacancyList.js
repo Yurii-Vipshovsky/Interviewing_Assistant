@@ -24,19 +24,35 @@ export default class vacancyList extends LightningElement {
         this.description = event.target.value;
     }
 
+    handleOfferChanged(event){
+        this.offer = event.target.value;
+    }
+
+    handleRequireChanged(event){
+        this.require = event.target.value;
+    }
+
+    vacancyChanged(){
+        console.log('Vacancy Changed');
+        this.showSuccess = true;
+        refreshApex(this.vacancies);
+    }
+
     createVacancy(){
-        console.log(this.recordId,  this.name, this.description);
-        addVacancy({companyId: this.recordId, name: this.name, description: this.description} )
-            .then( () => {
-                    console.log('Vacancy created');
-                    this.showForm = false;
-                    this.showSuccess = true;
-                    refreshApex(this.vacancies);
-                }
-            )
-            .catch(error => {
-                console.log('Vacancy not created');
-                console.log(error)
-            })
+        console.log(this.vacancies);
+        if(this.name !== undefined){
+            addVacancy({companyId: this.recordId, name: this.name, description: this.description, offer : this.offer, require : this.require} )
+                .then( () => {
+                        console.log('Vacancy created');
+                        this.showForm = false;
+                        this.showSuccess = true;
+                        refreshApex(this.vacancies);
+                    }
+                )
+                .catch(error => {
+                    console.log('Vacancy not created');
+                    console.log(error)
+                })
+        }
     }
 }

@@ -1,0 +1,11 @@
+<template>
+    <lightning-card title="Interviews">
+        <template if:true={interviews.data} onload={testLog}>
+            <ul class='slds-p-left_medium'>
+                <template for:each={interviews.data} for:item='interview'>
+                    <c-interview-component key={interview.Id} interview={interview}></c-interview-component>
+                </template>
+            </ul>
+        </template>
+    </lightning-card>
+</template>
