@@ -6,6 +6,12 @@
                     <c-interview-component key={interview.Id} interview={interview}></c-interview-component>
                 </template>
             </ul>
+            <lightning-layout-item size="12">
+                <lightning-card>
+                    <lightning-button onclick={createNewInterview} label="New Interview" class="slds-m-left_x-small" slot="actions">
+                    </lightning-button>
+                </lightning-card>
+            </lightning-layout-item>
         </template>
     </lightning-card>
 </template>

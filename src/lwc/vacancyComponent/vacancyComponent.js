@@ -1,7 +1,8 @@
 import {LightningElement, api} from 'lwc';
 import changeAvailable from '@salesforce/apex/VacancyController.changeAvailable';
+import {NavigationMixin} from "lightning/navigation";
 
-export default class VacancyComponent extends LightningElement {
+export default class VacancyComponent extends NavigationMixin(LightningElement) {
     @api vacancy
     changeAvailable(){
         console.log(this.vacancy);
@@ -15,5 +16,15 @@ export default class VacancyComponent extends LightningElement {
                     console.log('Available not changed');
                     console.log(error)
                 })
+    }
+    createInterview(){
+        console.log('test');
+        this[NavigationMixin.Navigate]({
+            type: 'standard__objectPage',
+            attributes: {
+                objectApiName: 'Interview__c',
+                actionName: 'new'
+            },
+        });
     }
 }
