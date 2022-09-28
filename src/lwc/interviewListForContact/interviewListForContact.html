@@ -1,0 +1,29 @@
+<template>
+    <lightning-card title="Interviews">
+        <template if:true={interviews.data} onload={testLog}>
+            <ul class='slds-p-left_medium'>
+                <template for:each={interviews.data} for:item='interview'>
+                    <lightning-record-view-form key={interview.Id}
+                            record-id={interview.Id}
+                            object-api-name="Interview__c">
+                        <div class="slds-box">
+                            <lightning-output-field field-name="Time__c"></lightning-output-field>
+                            <lightning-output-field field-name="Vacancy__c"></lightning-output-field>
+                            <lightning-output-field field-name="Passed__c"></lightning-output-field>
+                            <lightning-output-field field-name="To_Interview__c"></lightning-output-field>
+                            <lightning-output-field field-name="Interviewer__c"></lightning-output-field>
+                        </div>
+                        <template if:true={interview.Passed__c}>
+                            <lightning-output-field field-name="Offered_salary__c"></lightning-output-field>
+                            <lightning-output-field field-name="Feedback__c"></lightning-output-field>
+                            <lightning-button class='slds-p-top_small' label='Accept' onclick={acceptOffer}></lightning-button>
+                            <lightning-button class='slds-p-top_small' label='Decline' onclick={declineOffer}></lightning-button>
+                        </template>
+                    </lightning-record-view-form>
+                </template>
+            </ul>
+
+        </template>
+    </lightning-card>
+
+</template>
