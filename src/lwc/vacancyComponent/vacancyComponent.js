@@ -4,6 +4,7 @@ import {NavigationMixin} from "lightning/navigation";
 
 export default class VacancyComponent extends NavigationMixin(LightningElement) {
     @api vacancy
+
     changeAvailable(){
         console.log(this.vacancy);
             changeAvailable({vacancyId: this.vacancy.Id} )
@@ -17,6 +18,7 @@ export default class VacancyComponent extends NavigationMixin(LightningElement) 
                     console.log(error)
                 })
     }
+
     createInterview(){
         console.log('test');
         this[NavigationMixin.Navigate]({
@@ -24,6 +26,18 @@ export default class VacancyComponent extends NavigationMixin(LightningElement) 
             attributes: {
                 objectApiName: 'Interview__c',
                 actionName: 'new'
+            },
+        });
+    }
+
+    viewRecord(event) {
+        // Navigate to Account record page
+        this[NavigationMixin.Navigate]({
+            type: 'standard__recordPage',
+            attributes: {
+                "recordId": this.vacancy.Id,
+                "objectApiName": "Vacancy__c",
+                "actionName": "view"
             },
         });
     }
