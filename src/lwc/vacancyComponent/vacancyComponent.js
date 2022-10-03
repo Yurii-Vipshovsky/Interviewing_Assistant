@@ -30,8 +30,7 @@ export default class VacancyComponent extends NavigationMixin(LightningElement) 
         });
     }
 
-    viewRecord(event) {
-        // Navigate to Account record page
+    viewRecord() {
         this[NavigationMixin.Navigate]({
             type: 'standard__recordPage',
             attributes: {

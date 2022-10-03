@@ -2,7 +2,7 @@ public with sharing class VacancyController {
 
     @AuraEnabled(Cacheable=true)
     public static  List<Vacancy__c> getVacanciesByCompanyId(Id companyId){
-        return [SELECT Id, Name, Description__c, Available__c, We_Offer__c, Requirements__c FROM Vacancy__c WHERE Related_Company__c =:companyId];
+        return VacancySelector.SelectVacanciesByCompanyId(companyId);
     }
 
     @AuraEnabled
@@ -12,7 +12,7 @@ public with sharing class VacancyController {
 
     @AuraEnabled
     public static void changeAvailable(Id vacancyId){
-        Vacancy__c toChange = [SELECT Id, Available__c FROM Vacancy__c WHERE Id=:vacancyId LIMIT 1];
+        Vacancy__c toChange = VacancySelector.SelectVacancyById(vacancyId);
         toChange.Available__c = !toChange.Available__c;
         update toChange;
     }

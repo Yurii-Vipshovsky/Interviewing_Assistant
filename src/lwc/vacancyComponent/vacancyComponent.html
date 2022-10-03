@@ -13,6 +13,8 @@
         <lightning-button class='slds-p-top_small' label='Change to Open' onclick={changeAvailable}></lightning-button>
     </template>
     <br>
-    <lightning-button class='slds-p-top_small' label='Create New Interview' onclick={createInterview}></lightning-button>
+    <template if:true={vacancy.Available__c} >
+        <lightning-button class='slds-p-top_small' label='Create New Interview' onclick={createInterview}></lightning-button>
+    </template>
     <br>
 </template>
