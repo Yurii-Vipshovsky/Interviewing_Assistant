@@ -1,6 +1,6 @@
 public with sharing class InterviewSelector {
     public static List<Interview__c> SelectInterviewsForWeekByInterviewers(Set<Id> interviewIds){
-        return [SELECT Id, To_Interview__c FROM Interview__c
+        return [SELECT Id, Interviewer__c FROM Interview__c
             WHERE Time__c<NEXT_WEEK AND Time__c > LAST_WEEK
             AND Interviewer__c IN : interviewIds];
     }
