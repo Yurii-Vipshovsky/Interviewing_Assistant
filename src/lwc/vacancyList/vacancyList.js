@@ -33,7 +33,6 @@ export default class vacancyList extends LightningElement {
     }
 
     vacancyChanged(){
-        console.log('Vacancy Changed');
         this.showSuccess = true;
         refreshApex(this.vacancies);
     }
@@ -43,14 +42,12 @@ export default class vacancyList extends LightningElement {
         if(this.name !== undefined){
             addVacancy({companyId: this.recordId, name: this.name, description: this.description, offer : this.offer, require : this.require} )
                 .then( () => {
-                        console.log('Vacancy created');
                         this.showForm = false;
                         this.showSuccess = true;
                         refreshApex(this.vacancies);
                     }
                 )
                 .catch(error => {
-                    console.log('Vacancy not created');
                     console.log(error)
                 })
         }

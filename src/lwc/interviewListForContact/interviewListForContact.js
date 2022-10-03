@@ -1,5 +1,6 @@
 import {LightningElement, api, wire} from 'lwc';
 import getInterviewsByContactId from '@salesforce/apex/InterviewController.getInterviewsByContactId';
+import { refreshApex } from '@salesforce/apex';
 
 export default class InterviewListForContact extends LightningElement {
     @api recordId
@@ -7,10 +8,7 @@ export default class InterviewListForContact extends LightningElement {
     @wire(getInterviewsByContactId, {contactId:'$recordId'})
     interviews;
 
-    acceptOffer(){
-
-    }
-    declineOffer(){
-
+    interviewChanged(){
+        refreshApex(this.interviews);
     }
 }

@@ -1,0 +1,29 @@
+<template>
+    <lightning-record-view-form record-id={interview.Id}
+                                object-api-name="Interview__c">
+        <div class="slds-box">
+            <lightning-output-field field-name="Time__c"></lightning-output-field>
+            <lightning-output-field field-name="Vacancy__c"></lightning-output-field>
+            <lightning-output-field field-name="To_Interview__c"></lightning-output-field>
+            <lightning-output-field field-name="Interviewer__c"></lightning-output-field>
+            <lightning-output-field field-name="Passed__c"></lightning-output-field>
+        </div>
+        <template if:true={interview.Passed__c}>
+            <lightning-output-field field-name="Offered_salary__c"></lightning-output-field>
+            <lightning-output-field field-name="Feedback__c"></lightning-output-field>
+            <lightning-output-field field-name="Potential_start_date__c"></lightning-output-field>
+            <template if:false= {interview.Accept__c}>
+                <template if:false= {interview.Declined__c}>
+                    <lightning-button class='slds-p-top_small' label='Accept' onclick={acceptOffer}></lightning-button>
+                    <lightning-button class='slds-p-top_small' label='Decline' onclick={declineOffer}></lightning-button>
+                </template>
+            </template>
+        </template>
+        <template if:true={interview.Accept__c}>
+            <p>You accepted Offer</p>
+        </template>
+        <template if:true={interview.Declined__c}>
+            <p>You declined Offer</p>
+        </template>
+    </lightning-record-view-form>
+</template>

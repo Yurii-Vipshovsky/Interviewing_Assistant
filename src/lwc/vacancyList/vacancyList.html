@@ -3,7 +3,7 @@
         <template if:true={vacancies.data}>
             <ul class='slds-p-left_medium'>
                 <template for:each={vacancies.data} for:item='vacancy'>
-                    <c-vacancy-component key={vacancy.Id} vacancy={vacancy} onchanged= {vacancyChanged}></c-vacancy-component>
+                    <c-vacancy-component key={vacancy.Id} vacancy={vacancy} onchanged={vacancyChanged}></c-vacancy-component>
                 </template>
             </ul>
         </template>

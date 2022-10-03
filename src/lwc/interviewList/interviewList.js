@@ -6,9 +6,6 @@ export default class InterviewList extends NavigationMixin(LightningElement) {
     @api recordId
     @wire(getInterviewsByVacancyId, {vacancyId:'$recordId'})
     interviews;
-    testLog(){
-        console.log(this.interviews);
-    }
     createNewInterview() {
         console.log('test');
         this[NavigationMixin.Navigate]({
