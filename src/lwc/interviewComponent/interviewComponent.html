@@ -17,6 +17,7 @@
             <div class=slds-p-around_medium>
                 <lightning-input label='Offered Salary' onchange={handleSalaryChanged}></lightning-input><br>
                 <lightning-input label='Feedback' onchange={handleFeedbackChanged}></lightning-input><br>
+                <lightning-input type="number" label='Hours per week' onchange={handleHoursChanged}></lightning-input><br>
                 <lightning-input type="date" label='Potential start date' onchange={handleStartChanged}></lightning-input><br>
                 <lightning-button class='slds-p-top_small' label='Create' onclick={createOffer}></lightning-button>
                 <lightning-button class='slds-p-top_small' label='Cancel' onclick={cancelCreation}></lightning-button>

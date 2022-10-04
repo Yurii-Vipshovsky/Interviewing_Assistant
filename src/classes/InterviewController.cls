@@ -26,12 +26,13 @@ public with sharing class InterviewController {
         update toChange;
     }
     @AuraEnabled
-    public static void createOffer(Id interviewId, Double salary, String feedback, Date startDate){
+    public static void createOffer(Id interviewId, Double salary, String feedback, Date startDate, Integer hours){
         Interview__c toUpdate = InterviewSelector.SelectInterviewById(interviewId);
         toUpdate.Passed__c = true;
         toUpdate.Offered_salary__c = salary;
         toUpdate.Feedback__c = feedback;
         toUpdate.Potential_start_date__c = startDate;
+        toUpdate.Hours_per_week__c = hours;
         update toUpdate;
     }
 }

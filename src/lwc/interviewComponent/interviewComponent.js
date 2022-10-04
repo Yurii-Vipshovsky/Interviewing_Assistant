@@ -24,20 +24,17 @@ export default class InterviewComponent extends NavigationMixin(LightningElement
     handleStartChanged(event){
         this.start = event.target.value;
     }
+    handleHoursChanged(event){
+        this.hours = event.target.value;
+    }
     createOffer(){
-        console.log(this.interview.Id);
-            createOffer({interviewId: this.interview.Id, salary: this.salary, feedback: this.feedback, startDate : this.start} )
+            createOffer({interviewId: this.interview.Id, salary: this.salary, feedback: this.feedback, startDate : this.start, hours : this.hours} )
                 .then( () => {
                         this.showForm = false;
                         this.showSuccess = true;
                     }
                 )
                 .catch(error => {
-                    console.log(this.interview.Id);
-                    console.log(this.salary);
-                    console.log(this.feedback);
-                    console.log(this.start);
-
                     console.log(error)
                 })
 

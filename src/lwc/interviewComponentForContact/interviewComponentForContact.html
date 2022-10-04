@@ -12,6 +12,7 @@
             <lightning-output-field field-name="Offered_salary__c"></lightning-output-field>
             <lightning-output-field field-name="Feedback__c"></lightning-output-field>
             <lightning-output-field field-name="Potential_start_date__c"></lightning-output-field>
+            <lightning-output-field field-name="Hours_per_week__c"></lightning-output-field>
             <template if:false= {interview.Accept__c}>
                 <template if:false= {interview.Declined__c}>
                     <lightning-button class='slds-p-top_small' label='Accept' onclick={acceptOffer}></lightning-button>
