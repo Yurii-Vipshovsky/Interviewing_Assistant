@@ -1,25 +1,75 @@
 public with sharing class InterviewTriggerHandler {
-    public static void handler(List<Interview__c> interviews) {
-        Set<Id> interviewersIds = new Set<Id>();
-        for(Integer i=0; i<interviews.size();++i){
-            interviewersIds.add(interviews[i].Interviewer__c);
-        }
-        List<Interview__c> interviewsForWeek = InterviewSelector.SelectInterviewsForWeekByInterviewers(interviewersIds);
-        Map<Id,Integer> interviewersCount = new Map<Id, Integer>();
-        for(Integer i=0;i<interviewsForWeek.size();++i){
-            if(interviewersCount.containsKey(interviewsForWeek[i].Interviewer__c)){
-                Integer tempCount = interviewersCount.get(interviewsForWeek[i].Interviewer__c) + 1;
-                interviewersCount.remove(interviewsForWeek[i].Interviewer__c);
-                interviewersCount.put(interviewsForWeek[i].Interviewer__c,tempCount);
+    public static void handler(List<Interview__c> interviews, TriggerOperation triggerOperation) {
+        switch on triggerOperation {
+            when BEFORE_INSERT {
+                Set<Id> interviewersIds = new Set<Id>();
+                Datetime minDate = interviews[0].Time__c;
+                Datetime maxDate = interviews[0].Time__c;
+                for(Integer i=0; i<interviews.size();++i){
+                    if(interviews[i].Time__c<Datetime.now()){
+                        interviews[i].addError('Can\'t insert interview with time less than now');
+                    }
+                    else {
+                        if(interviews[i].Time__c<minDate){
+                            minDate = interviews[i].Time__c;
+                        }
+                        if(interviews[i].Time__c>maxDate){
+                            maxDate = interviews[i].Time__c;
+                        }
+                        interviewersIds.add(interviews[i].Interviewer__c);
+                    }
+                }
+                List<Interview__c> interviewsForWeek = InterviewSelector.SelectInterviewsForWeekByInterviewers(interviewersIds,
+                                                        WeekDayHelper.previousWeek(minDate), WeekDayHelper.nextWeek(maxDate));
+
+                for(Integer i =0;i<interviews.size();++i){
+                    Integer counter = 0;
+                    for (Integer j =0;j<interviewsForWeek.size();++j){
+                        if(interviewsForWeek[j].Time__c<WeekDayHelper.nextWeek(interviews[i].Time__c)
+                                && interviewsForWeek[j].Time__c>WeekDayHelper.previousWeek(interviews[i].Time__c)){
+                            counter++;
+                        }
+                    }
+                    if (counter<3) {
+                        interviewsForWeek.add(interviews[i]);
+                    }
+                    else {
+                        interviews[i].addError('Can\'t insert this interview, because interviewer has already 3 interviews');
+                    }
+                }
             }
-            else {
-                interviewersCount.put(interviewsForWeek[i].Interviewer__c,1);
-            }
-        }
-        System.debug(interviewersCount.get(interviews[0].Interviewer__c));
-        for(Integer i=0; i<interviews.size();++i){
-            if(interviewersCount.get(interviews[i].Interviewer__c) > 3){
-                interviews[i].addError('Can\'t insert this interview, because interviewer has already 3 interviews');
+            when BEFORE_UPDATE {
+                Set<Id> interviewersIds = new Set<Id>();
+                Datetime minDate = interviews[0].Time__c;
+                Datetime maxDate = interviews[0].Time__c;
+                for(Integer i=0; i<interviews.size();++i){
+                    if(interviews[i].Time__c<minDate){
+                        minDate = interviews[i].Time__c;
+                    }
+                    if(interviews[i].Time__c>maxDate){
+                        maxDate = interviews[i].Time__c;
+                    }
+                    interviewersIds.add(interviews[i].Interviewer__c);
+                }
+                List<Interview__c> interviewsForWeek = InterviewSelector.SelectInterviewsForWeekByInterviewers(interviewersIds,
+                        WeekDayHelper.previousWeek(minDate), WeekDayHelper.nextWeek(maxDate));
+
+                for(Integer i =0;i<interviews.size();++i){
+                    Integer counter = 0;
+                    for (Integer j =0;j<interviewsForWeek.size();++j){
+                        if(interviewsForWeek[j].Time__c<WeekDayHelper.nextWeek(interviews[i].Time__c)
+                                && interviewsForWeek[j].Time__c>WeekDayHelper.previousWeek(interviews[i].Time__c)
+                                && interviews[i].Id!=interviewsForWeek[j].Id){
+                            counter++;
+                        }
+                    }
+                    if (counter<3) {
+                        interviewsForWeek.add(interviews[i]);
+                    }
+                    else {
+                        interviews[i].addError('Can\'t update this interview, because interviewer has already 3 interviews');
+                    }
+                }
             }
         }
     }

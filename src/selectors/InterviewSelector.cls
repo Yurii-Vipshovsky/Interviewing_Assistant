@@ -1,7 +1,7 @@
 public with sharing class InterviewSelector {
-    public static List<Interview__c> SelectInterviewsForWeekByInterviewers(Set<Id> interviewIds){
-        return [SELECT Id, Interviewer__c FROM Interview__c
-            WHERE Time__c<NEXT_WEEK AND Time__c > LAST_WEEK
+    public static List<Interview__c> SelectInterviewsForWeekByInterviewers(Set<Id> interviewIds, Date searchFrom, Date searchTo){
+        return [SELECT Id, Interviewer__c, Time__c FROM Interview__c
+            WHERE Time__c<:searchTo AND Time__c > :searchFrom
             AND Interviewer__c IN : interviewIds];
     }
 
