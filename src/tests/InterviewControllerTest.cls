@@ -10,6 +10,9 @@ private class InterviewControllerTest {
     private static Id getVacancyId(Integer num){
         return [SELECT Id FROM Vacancy__c][num].Id;
     }
+    private static Id getInterviewId(Integer num){
+        return [SELECT Id FROM Interview__c][num].Id;
+    }
 
     @TestSetup
     static void prepareData () {
@@ -25,16 +28,31 @@ private class InterviewControllerTest {
 
         List<Contact> testContacts = new List<Contact>();
         testContacts.add(new Contact(
+                FirstName='test',
                 LastName='Test Contact 0',
-                Phone='12345786'));
+                Email='test@gmail.com'));
         testContacts.add(new Contact(
+                FirstName='test',
                 LastName='Test Contact 1',
-                Phone='12345786'));
+                Email='test@gmail.com'));
         testContacts.add(new Contact(
+                FirstName='test',
                 LastName='Test Contact 2',
-                Phone='12345786'));
+                Email='test@gmail.com'));
+        testContacts.add(new Contact(
+                FirstName='test',
+                LastName='Test Contact Interviewer 1',
+                Email='test@gmail.com'));
+        testContacts.add(new Contact(
+                FirstName='test',
+                LastName='Test Contact Interviewer 2',
+                Email='test@gmail.com'));
+        testContacts.add(new Contact(
+                FirstName='test',
+                LastName='Test Contact Interviewer 3',
+                Email='test@gmail.com'));
         insert testContacts;
-        //3 contacts
+        //6 contacts 3+3
 
         List<Vacancy__c> testVacancies = new List<Vacancy__c>();
         testVacancies.add(new Vacancy__c(
@@ -80,41 +98,65 @@ private class InterviewControllerTest {
                 Name = 'Test record 0',
                 Vacancy__c = getVacancyId(0),
                 To_Interview__c = getContactId(0),
+                Interviewer__c = getContactId(3),
+                To_Interview__r = testContacts[0],
+                Interviewer__r = testContacts[3],
                 Time__c = Datetime.now())); //time now comp0
         testInterviews.add(new Interview__c(
                 Name = 'Test record 1',
                 Vacancy__c = getVacancyId(0),
                 To_Interview__c = getContactId(1),
+                Interviewer__c = getContactId(3),
+                To_Interview__r = testContacts[1],
+                Interviewer__r = testContacts[3],
                 Time__c = Datetime.now().addDays(2))); // now+2  comp0
         testInterviews.add(new Interview__c(
                 Name = 'Test record 2',
                 Vacancy__c = getVacancyId(0),
                 To_Interview__c = getContactId(2),
+                Interviewer__c = getContactId(3),
+                To_Interview__r = testContacts[2],
+                Interviewer__r = testContacts[3],
                 Time__c = Datetime.now().addDays(1))); // now+1 comp0
         testInterviews.add(new Interview__c(
                 Name = 'Test record 3',
                 Vacancy__c = getVacancyId(1),
                 To_Interview__c = getContactId(0),
+                Interviewer__c = getContactId(4),
+                To_Interview__r = testContacts[0],
+                Interviewer__r = testContacts[4],
                 Time__c = Datetime.now().addDays(3))); // now+3 comp0
         testInterviews.add(new Interview__c(
                 Name = 'Test record 4',
                 Vacancy__c = getVacancyId(1),
                 To_Interview__c = getContactId(1),
+                Interviewer__c = getContactId(4),
+                To_Interview__r = testContacts[1],
+                Interviewer__r = testContacts[4],
                 Time__c = Datetime.now().addDays(1))); // now+1 comp0
         testInterviews.add(new Interview__c(
                 Name = 'Test record 5',
                 Vacancy__c = getVacancyId(2),
                 To_Interview__c = getContactId(1),
+                Interviewer__c = getContactId(4),
+                To_Interview__r = testContacts[1],
+                Interviewer__r = testContacts[4],
                 Time__c = Datetime.now())); // now comp0
         testInterviews.add(new Interview__c(
                 Name = 'Test record 6',
                 Vacancy__c = getVacancyId(3),
                 To_Interview__c = getContactId(2),
+                Interviewer__c = getContactId(5),
+                To_Interview__r = testContacts[2],
+                Interviewer__r = testContacts[5],
                 Time__c = Datetime.now().addDays(10))); // now+10 comp1
         testInterviews.add(new Interview__c(
                 Name = 'Test record 7',
                 Vacancy__c = getVacancyId(4),
                 To_Interview__c = getContactId(0),
+                Interviewer__c = getContactId(5),
+                To_Interview__r = testContacts[0],
+                Interviewer__r = testContacts[5],
                 Time__c = Datetime.now().addDays(8)));// now+8 comp1
 
         insert testInterviews;
@@ -183,6 +225,34 @@ private class InterviewControllerTest {
         }
 
         System.assertEquals(0, result1.size(), '0 Interviews record expected. All Interviews next week');
+    }
+
+    @IsTest
+    static void testAcceptOffer() {
+        Test.startTest();
+        List<Interview__c> result0 = [SELECT Id FROM Interview__c WHERE Accept__c=TRUE];
+        System.assertEquals(0, result0.size(), '0 accepted offer expected');
+        InterviewController.acceptOffer(getInterviewId(3));
+        List<Interview__c> result1 = [SELECT Id FROM Interview__c WHERE Accept__c=TRUE];
+        System.assertEquals(1, result1.size(), '1 accepted offer expected');
+        InterviewController.acceptOffer(getInterviewId(4));
+        List<Interview__c> result2 = [SELECT Id FROM Interview__c WHERE Accept__c=TRUE];
+        System.assertEquals(2, result2.size(), '2 accepted offer expected');
+        Test.stopTest();
+    }
+
+    @IsTest
+    static void testDeclineOffer() {
+        Test.startTest();
+        List<Interview__c> result0 = [SELECT Id FROM Interview__c WHERE Declined__c=TRUE];
+        System.assertEquals(0, result0.size(), '0 declined offer expected');
+        InterviewController.declineOffer(getInterviewId(3));
+        List<Interview__c> result1 = [SELECT Id FROM Interview__c WHERE Declined__c=TRUE];
+        System.assertEquals(1, result1.size(), '1 declined offer expected');
+        InterviewController.declineOffer(getInterviewId(4));
+        List<Interview__c> result2 = [SELECT Id FROM Interview__c WHERE Declined__c=TRUE];
+        System.assertEquals(2, result2.size(), '2 declined offer expected');
+        Test.stopTest();
     }
 
 }

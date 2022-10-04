@@ -10,5 +10,22 @@
             <lightning-output-field field-name="Interviewer__c"></lightning-output-field>
         </div>
         <lightning-button class='slds-p-top_small' label='Open Interview' onclick={viewRecord}></lightning-button>
+        <template if:false={interview.Passed__c}>
+            <lightning-button class='slds-p-top_small' label='Create Offer' onclick={createOfferShowForm}></lightning-button>
+        </template>
+        <template if:true={showForm}>
+            <div class=slds-p-around_medium>
+                <lightning-input label='Offered Salary' onchange={handleSalaryChanged}></lightning-input><br>
+                <lightning-input label='Feedback' onchange={handleFeedbackChanged}></lightning-input><br>
+                <lightning-input type="date" label='Potential start date' onchange={handleStartChanged}></lightning-input><br>
+                <lightning-button class='slds-p-top_small' label='Create' onclick={createOffer}></lightning-button>
+                <lightning-button class='slds-p-top_small' label='Cancel' onclick={cancelCreation}></lightning-button>
+            </div>
+        </template>
+        <template if:true={showSuccess}>
+            <div class=slds-p-around_medium>
+                <p>Success</p>
+            </div>
+        </template>
     </lightning-record-view-form>
 </template>

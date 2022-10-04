@@ -6,7 +6,7 @@ public with sharing class InterviewSelector {
     }
 
     public static List<Interview__c> SelectInterviewsByVacancyId(Id vacancyId){
-        return [SELECT Id FROM Interview__c WHERE Vacancy__c =:vacancyId];
+        return [SELECT Id, Passed__c FROM Interview__c WHERE Vacancy__c =:vacancyId];
     }
 
     public static List<Interview__c> SelectInterviewsByContactId(Id contactId){
@@ -15,7 +15,7 @@ public with sharing class InterviewSelector {
 
     public static List<Interview__c> SelectInterviewsForWeekForCompany(Id companyId){
         List<Vacancy__c> ids = VacancySelector.SelectVacanciesByRelatedCompany(companyId);
-        return [SELECT Id  FROM Interview__c
+        return [SELECT Id, Passed__c FROM Interview__c
                             WHERE Vacancy__c IN :ids
                             AND Time__c<NEXT_WEEK AND Time__c>LAST_WEEK];
     }

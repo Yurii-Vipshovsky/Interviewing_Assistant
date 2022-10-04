@@ -38,7 +38,6 @@ export default class vacancyList extends LightningElement {
     }
 
     createVacancy(){
-        console.log(this.vacancies);
         if(this.name !== undefined){
             addVacancy({companyId: this.recordId, name: this.name, description: this.description, offer : this.offer, require : this.require} )
                 .then( () => {
