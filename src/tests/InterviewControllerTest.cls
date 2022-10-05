@@ -1,6 +1,8 @@
 @IsTest
 private class InterviewControllerTest {
 
+    //private static Id candidateRecordTypeId = Schema.SObjectType.Contact.getRecordTypeInfosByName().get('Candidate').getRecordTypeId();
+    //private static Id customerRecordTypeId = Schema.SObjectType.Contact.getRecordTypeInfosByName().get('Customer').getRecordTypeId();
     private static Id getCompanyId(Integer num){
         return [SELECT Id FROM Account][num].Id;
     }
@@ -51,6 +53,7 @@ private class InterviewControllerTest {
                 FirstName='test',
                 LastName='Test Contact Interviewer 3',
                 Email='test@gmail.com'));
+        //System.debug(testContacts);
         insert testContacts;
         //6 contacts 3+3
 
@@ -101,7 +104,7 @@ private class InterviewControllerTest {
                 Interviewer__c = getContactId(3),
                 To_Interview__r = testContacts[0],
                 Interviewer__r = testContacts[3],
-                Time__c = Datetime.now())); //time now comp0
+                Time__c = Datetime.now().addDays(1))); //now+1 comp0
         testInterviews.add(new Interview__c(
                 Name = 'Test record 1',
                 Vacancy__c = getVacancyId(0),
@@ -141,7 +144,7 @@ private class InterviewControllerTest {
                 Interviewer__c = getContactId(4),
                 To_Interview__r = testContacts[1],
                 Interviewer__r = testContacts[4],
-                Time__c = Datetime.now())); // now comp0
+                Time__c = Datetime.now().addDays(1))); // now +1  comp0
         testInterviews.add(new Interview__c(
                 Name = 'Test record 6',
                 Vacancy__c = getVacancyId(3),
