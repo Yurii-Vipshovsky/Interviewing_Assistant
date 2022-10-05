@@ -25,7 +25,7 @@ public with sharing class WeekDayHelper {
         }
         return Date.newInstance(dt.year(), dt.month(), dt.day());
     }
-    public  static Date nextWeek(Datetime dt){
+    public static Date nextWeek(Datetime dt){
         String weekday = dt.format('EEE');
         switch on weekday{
             when 'Mon'{

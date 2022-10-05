@@ -1,19 +1,5 @@
 public with sharing class InterviewTriggerHandler {
     public static void handler(List<Interview__c> interviews, TriggerOperation triggerOperation) {
-        /*Id candidateRecType = Schema.SObjectType.Contact.getRecordTypeInfosByName().get('Candidate').getRecordTypeId();
-        Id customerRecType = Schema.SObjectType.Contact.getRecordTypeInfosByName().get('Customer').getRecordTypeId();
-        for(Integer i = 0; i<interviews.size(); ++i){
-            if(interviews[i].Interviewer__r.RecordTypeId != customerRecType){
-                System.debug(interviews[i].Interviewer__r.RecordTypeId);
-                System.debug(customerRecType);
-                interviews[i].addError('Interviewer Role should be Customer');
-                continue;
-            }
-            if(interviews[i].To_Interview__r.RecordTypeId != candidateRecType){
-                interviews[i].addError('To Interview Role should be Candidate');
-                continue;
-            }
-        }*/
         Set<Id> interviewersIds = new Set<Id>();
         Datetime minDate = interviews[0].Time__c;
         Datetime maxDate = interviews[0].Time__c;
@@ -40,20 +26,30 @@ public with sharing class InterviewTriggerHandler {
                 for(Integer i =0;i<interviews.size();++i){
                     System.debug('handler'+i+' '+interviewsForWeek);
                     Integer counter = 0;
+                    Boolean sameDay = false;
                     for (Integer j =0;j<interviewsForWeek.size();++j){
+                        if(interviewsForWeek[j].Time__c.isSameDay(interviews[i].Time__c)
+                                && interviewsForWeek[j].Interviewer__c==interviews[i].Interviewer__c){
+                            sameDay = true;
+                            continue;
+                        }
                         if(interviewsForWeek[j].Time__c<WeekDayHelper.nextWeek(interviews[i].Time__c)
                                 && interviewsForWeek[j].Time__c>WeekDayHelper.previousWeek(interviews[i].Time__c)
                                 && interviewsForWeek[j].Interviewer__c==interviews[i].Interviewer__c){
                             counter++;
                         }
                     }
-                    if (counter<3) {
+                    if (counter<3 && sameDay == false) {
                         interviewsForWeek.add(interviews[i]);
                     }
                     else {
-                        interviews[i].addError('Can\'t insert this interview, because interviewer'
-                                                +interviews[i].Interviewer__r.FirstName+' '
-                                                + interviews[i].Interviewer__r.LastName+'has already 3 interviews');
+                        if (sameDay) {
+                            interviews[i].addError('Can\'t insert this interview, because interviewer has already interview in same day');
+                        }
+                        else {
+                            interviews[i].addError('Can\'t insert this interview, because interviewer has already 3 interviews');
+                        }
+
                     }
                 }
             }
